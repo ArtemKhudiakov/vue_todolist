@@ -27,13 +27,13 @@ export default {
 }
 
 .link {
-  color: #001C30;
+  color: #7895CB;
   font-size: 18px;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .link:hover {
-  color: #176B87;
+  color: #4A55A2;
 }
 </style>

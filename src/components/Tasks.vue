@@ -5,10 +5,14 @@
       <input type="text" v-model="newTask" placeholder="Новая задача" :class="$style.input"/>
       <button type="submit" :class="$style.button">Добавить</button>
     </form>
+    <h3 :class="$style.subtitle">Задачи:</h3>
     <ul :class="$style.list">
       <li v-for="task in tasks" :key="task.id" :class="$style.item">
-        <p v-if="!task.editing" :class="$style.text">{{ task.text }}</p>
-        <input v-else v-model="task.editedText" @keyup.enter="saveTask(task)" :class="$style.editing"/>
+        <div :class="$style.wrapper">
+          <p v-if="!task.editing" :class="$style.text">{{ task.text }}</p>
+          <input v-else v-model="task.editedText" @keyup.enter="saveTask(task)" :class="$style.editing"/>
+          <button v-if="task.editing" @click="saveTask(task)" :class="$style.ok">OK</button>
+        </div>
         <div :class="$style.buttons">
           <button v-if="!task.editing" @click="editTask(task)" :class="$style.edit">Редактировать</button>
           <button v-else @click="cancelEditing(task)" :class="$style.cancel">Отменить</button>
@@ -110,6 +114,8 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 5px;
+  width: 80px;
 }
 
 .button:hover {
@@ -147,9 +153,15 @@ export default {
   border-radius: 4px;
 }
 
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
 .delete,
 .edit,
-.cancel {
+.cancel,
+.ok {
   margin: 5px;
   padding: 4px 8px;
   background-color: #dc3545;
@@ -168,14 +180,20 @@ export default {
   background-color: #6c757d;
 }
 
+.ok {
+  background-color: #28a745;
+  width: 80px;
+}
+
 .delete:hover,
 .edit:hover,
-.cancel:hover {
+.cancel:hover,
+.ok:hover {
   opacity: 0.8;
 }
 
 .link {
-  color: #007bff;
+  color: #7895CB;
   font-size: 18px;
   text-decoration: none;
   transition: color 0.3s ease;
@@ -183,14 +201,12 @@ export default {
 }
 
 .link:hover {
-  color: #0056b3;
+  color: #4A55A2;
 }
 
 .buttons {
   display: flex;
-
   align-items: center;
 }
-
 
 </style>
