@@ -9,10 +9,13 @@
       <li v-for="task in tasks" :key="task.id" :class="$style.item">
         <p v-if="!task.editing" :class="$style.text">{{ task.text }}</p>
         <input v-else v-model="task.editedText" @keyup.enter="saveTask(task)" :class="$style.editing"/>
-        <button v-if="!task.editing" @click="editTask(task)" :class="$style.edit">Редактировать</button>
+        <div :class="$style.buttons">
+          <button v-if="!task.editing" @click="editTask(task)" :class="$style.edit">Редактировать</button>
+          <button v-else @click="cancelEditing(task)" :class="$style.cancel">Отменить</button>
+          <button @click="deleteTask(task.id)" :class="$style.delete">Удалить</button>
+        </div>
       </li>
     </ul>
-
 
     <router-link to="/" :class="$style.link">Назад на главную страницу</router-link>
   </div>
@@ -36,6 +39,9 @@ export default {
       }
     }
 
+    function deleteTask(taskId) {
+      store.commit('deleteTask', taskId);
+    }
 
     function editTask(task) {
       task.editing = true;
@@ -49,8 +55,23 @@ export default {
       }
     }
 
+    function cancelEditing(task) {
+      task.editing = false;
+      task.editedText = '';
+    }
 
-    return {newTask, tasks, addTask, editTask, saveTask};
+    // Сохранение задач в localStorage
+    watch(tasks, (newTasks) => {
+      localStorage.setItem('tasks', JSON.stringify(newTasks));
+    }, {deep: true});
+
+    // Загрузка задач из localStorage
+    if (localStorage.getItem('tasks')) {
+      const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+      store.commit('setTasks', savedTasks);
+    }
+
+    return {newTask, tasks, addTask, deleteTask, editTask, saveTask, cancelEditing};
   },
 };
 </script>
@@ -126,7 +147,9 @@ export default {
   border-radius: 4px;
 }
 
-.edit {
+.delete,
+.edit,
+.cancel {
   margin: 5px;
   padding: 4px 8px;
   background-color: #dc3545;
@@ -141,7 +164,13 @@ export default {
   background-color: #ffc107;
 }
 
-.edit:hover {
+.cancel {
+  background-color: #6c757d;
+}
+
+.delete:hover,
+.edit:hover,
+.cancel:hover {
   opacity: 0.8;
 }
 
@@ -156,5 +185,12 @@ export default {
 .link:hover {
   color: #0056b3;
 }
+
+.buttons {
+  display: flex;
+
+  align-items: center;
+}
+
 
 </style>

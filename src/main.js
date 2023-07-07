@@ -2,7 +2,6 @@ import {createApp} from 'vue';
 import {createStore} from 'vuex';
 import {createRouter, createWebHistory} from 'vue-router';
 
-
 import App from './App.vue';
 import Home from './components/Home.vue';
 import Tasks from './components/Tasks.vue';
@@ -25,6 +24,9 @@ const store = createStore({
             if (taskIndex !== -1) {
                 state.tasks[taskIndex] = updatedTask;
             }
+        },
+        setTasks(state, tasks) {
+            state.tasks = tasks;
         }
     }
 });
