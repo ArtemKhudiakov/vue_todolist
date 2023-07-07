@@ -16,6 +16,15 @@ const store = createStore({
     mutations: {
         addTask(state, task) {
             state.tasks.unshift(task);
+        },
+        deleteTask(state, taskId) {
+            state.tasks = state.tasks.filter(task => task.id !== taskId);
+        },
+        updateTask(state, updatedTask) {
+            const taskIndex = state.tasks.findIndex(task => task.id === updatedTask.id);
+            if (taskIndex !== -1) {
+                state.tasks[taskIndex] = updatedTask;
+            }
         }
     }
 });
